@@ -131,6 +131,7 @@ export const CalculatorScreen = () => {
                 visible={configModalVisible}
                 date={editingDate}
                 initialData={editingDate ? selectedDays[editingDate] : undefined}
+                defaultHours={settings.defaultHours}
                 onSave={handleSaveDay}
                 onDelete={handleDeleteDay}
                 onClose={() => setConfigModalVisible(false)}

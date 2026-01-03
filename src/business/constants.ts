@@ -1,6 +1,7 @@
 export const SMMLV_2026 = 1750905;
 // export const SMMLV_2026 = 1423500;
 export const TRANSPORT_ALLOWANCE_2026 = 249095;
+export const TRANSPORT_DAILY = TRANSPORT_ALLOWANCE_2026 / 30;
 
 export const MONTHLY_HOURS_H1 = 220; // Jan 1 - Jul 14
 export const MONTHLY_HOURS_H2 = 210; // Jul 15 - Dec 31

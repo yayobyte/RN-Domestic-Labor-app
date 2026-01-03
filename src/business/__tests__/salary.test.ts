@@ -1,5 +1,5 @@
 import { isFirstSemester, getRates, calculateDirectPay } from '../salary';
-import { SMMLV_2026, MONTHLY_HOURS_H1, MONTHLY_HOURS_H2, TRANSPORT_HOURLY_H1, TRANSPORT_HOURLY_H2 } from '../constants';
+import { SMMLV_2026, MONTHLY_HOURS_H1, MONTHLY_HOURS_H2, TRANSPORT_DAILY } from '../constants';
 
 describe('Salary Logic', () => {
     describe('isFirstSemester', () => {
@@ -18,13 +18,11 @@ describe('Salary Logic', () => {
         it('should use H1 rates for January', () => {
             const rates = getRates(new Date(2026, 0, 1));
             expect(rates.hourlyRate).toBe(SMMLV_2026 / MONTHLY_HOURS_H1);
-            expect(rates.transportHour).toBe(TRANSPORT_HOURLY_H1);
         });
 
         it('should use H2 rates for August', () => {
             const rates = getRates(new Date(2026, 7, 1));
             expect(rates.hourlyRate).toBe(SMMLV_2026 / MONTHLY_HOURS_H2);
-            expect(rates.transportHour).toBe(TRANSPORT_HOURLY_H2);
         });
 
         it('should respect custom SMMLV', () => {
@@ -39,7 +37,7 @@ describe('Salary Logic', () => {
             const result = calculateDirectPay(8, false, new Date(2026, 0, 1));
             const expectedHourly = SMMLV_2026 / MONTHLY_HOURS_H1;
             expect(result.baseRate).toBe(expectedHourly);
-            expect(result.totalPay).toBe(8 * (expectedHourly + TRANSPORT_HOURLY_H1));
+            expect(result.totalPay).toBe((8 * expectedHourly) + TRANSPORT_DAILY);
         });
 
         it('should apply 35% surcharge for night shift', () => {
@@ -47,7 +45,7 @@ describe('Salary Logic', () => {
             const expectedHourly = SMMLV_2026 / MONTHLY_HOURS_H1;
             const expectedWithSurcharge = expectedHourly * 1.35;
             expect(result.activeHourlyRate).toBeCloseTo(expectedWithSurcharge, 2);
-            expect(result.totalPay).toBeCloseTo(8 * (expectedWithSurcharge + TRANSPORT_HOURLY_H1), 2);
+            expect(result.totalPay).toBeCloseTo((8 * expectedWithSurcharge) + TRANSPORT_DAILY, 2);
         });
 
         it('should calculate correctly with custom SMMLV', () => {

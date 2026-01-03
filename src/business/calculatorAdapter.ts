@@ -36,11 +36,11 @@ export const calculateDetailedMonthTotals = (selectedDays: SelectedDays, setting
 
         // Pay (with custom SMMLV)
         const payResult = calculateDirectPay(hours, isNight, date, settings.minimumSalary);
-        const baseSalaryForDay = payResult.baseRate * hours;
 
         totalGrossPay += payResult.totalPay;
-        totalBaseSalary += baseSalaryForDay;
-        totalTransport += (payResult.transportHour * hours);
+        totalBaseSalary += payResult.salaryPart;
+        totalTransport += payResult.transportPart;
+
         if (isNight) {
             totalSurcharge += (payResult.baseRate * 0.35 * hours);
         }
@@ -49,7 +49,7 @@ export const calculateDetailedMonthTotals = (selectedDays: SelectedDays, setting
         // Accruals
         const accrualResult = calculateAccruals(
             payResult.baseRate,
-            payResult.transportHour,
+            payResult.transportPart / hours, // Mock hourly transport for accruals if needed
             hours
         );
 

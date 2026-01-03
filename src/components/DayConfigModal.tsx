@@ -14,6 +14,7 @@ interface DayConfigModalProps {
     onSave: (hours: number, isNight: boolean) => void;
     onDelete: () => void;
     onClose: () => void;
+    defaultHours?: number;
 }
 
 export const DayConfigModal: React.FC<DayConfigModalProps> = ({
@@ -23,8 +24,9 @@ export const DayConfigModal: React.FC<DayConfigModalProps> = ({
     onSave,
     onDelete,
     onClose,
+    defaultHours = DEFAULT_HOURS_PER_DAY,
 }) => {
-    const [hours, setHours] = useState(DEFAULT_HOURS_PER_DAY);
+    const [hours, setHours] = useState(defaultHours);
     const [isNight, setIsNight] = useState(false);
 
     useEffect(() => {
@@ -32,15 +34,17 @@ export const DayConfigModal: React.FC<DayConfigModalProps> = ({
             setHours(initialData.hours);
             setIsNight(initialData.isNight);
         } else {
-            setHours(DEFAULT_HOURS_PER_DAY);
+            setHours(defaultHours);
             setIsNight(false);
         }
-    }, [initialData, visible]);
+    }, [initialData, visible, defaultHours]);
 
     const handleIncrement = () => setHours(h => Math.min(MAX_HOURS_PER_DAY, h + 1));
     const handleDecrement = () => setHours(h => Math.max(MIN_HOURS_PER_DAY, h - 1));
 
     if (!date) return null;
+
+    const PRESETS = [4, 8, 10, 12];
 
     return (
         <Modal
@@ -63,6 +67,25 @@ export const DayConfigModal: React.FC<DayConfigModalProps> = ({
                     </View>
 
                     <View style={styles.content}>
+                        {/* Hours Fast Presets */}
+                        <View style={styles.presetsContainer}>
+                            {PRESETS.map(p => (
+                                <TouchableOpacity
+                                    key={p}
+                                    style={[styles.presetBtn, hours === p && styles.presetBtnActive]}
+                                    onPress={() => setHours(p)}
+                                >
+                                    <Typography
+                                        variant="caption"
+                                        weight="bold"
+                                        color={hours === p ? "#FFF" : COLORS.textSecondary}
+                                    >
+                                        {p}h
+                                    </Typography>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+
                         {/* Hours Control */}
                         <View style={styles.row}>
                             <Typography variant="body" weight="medium">Hours Worked</Typography>
@@ -159,6 +182,25 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.surface,
         borderRadius: RADIUS.s,
         ...SHADOWS.soft,
+    },
+    presetsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: SPACING.s,
+    },
+    presetBtn: {
+        paddingHorizontal: SPACING.m,
+        paddingVertical: SPACING.s,
+        borderRadius: RADIUS.m,
+        backgroundColor: COLORS.background,
+        borderWidth: 1,
+        borderColor: COLORS.border,
+        minWidth: 60,
+        alignItems: 'center',
+    },
+    presetBtnActive: {
+        backgroundColor: COLORS.primary,
+        borderColor: COLORS.primary,
     },
     actions: {
         flexDirection: 'row',
