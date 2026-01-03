@@ -3,6 +3,7 @@ import { View, Modal, StyleSheet, TouchableOpacity, ScrollView, Platform } from 
 import { Typography } from '../ui/Typography';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../theme/theme';
 import { BlurView } from 'expo-blur';
+import { BENEFIT_PERCENTAGES, NIGHT_SURCHARGE_PERCENTAGE } from '../business/constants';
 
 interface BreakdownModalProps {
     visible: boolean;
@@ -31,6 +32,8 @@ interface BreakdownModalProps {
             pension: number;
             caja: number;
             arl: number;
+            employerPortion: number;
+            workerPortion: number;
             total: number;
         } | null;
     };
@@ -104,11 +107,11 @@ export const BreakdownModal: React.FC<BreakdownModalProps> = ({ visible, onClose
                                 <Row label={`Base Salary (${data.pay.hours}h)`} value={data.pay.baseSalary} />
                                 <Row label={`Transport Aid (${data.pay.daysWorked} day${data.pay.daysWorked !== 1 ? 's' : ''})`} value={data.pay.transport} />
                                 {data.pay.surcharge > 0 && (
-                                    <Row label="Night Surcharges (+35%)" value={data.pay.surcharge} />
+                                    <Row label={`Night Surcharges (+${(NIGHT_SURCHARGE_PERCENTAGE * 100).toFixed(0)}%)`} value={data.pay.surcharge} />
                                 )}
                                 <View style={styles.divider} />
                                 <Row label="Gross Pay" value={data.pay.grossPay} isSub />
-                                <Row label="Worker PILA (8%)" value={-data.pay.workerPilaDeduction} isSub />
+                                <Row label="Worker PILA Deduction" value={-data.pay.workerPilaDeduction} isSub />
                                 <View style={[styles.divider, { height: 2, backgroundColor: COLORS.primary }]} />
                                 <Row label="Net Pay to Worker" value={data.pay.netPay} isTotal />
                             </View>
@@ -120,10 +123,10 @@ export const BreakdownModal: React.FC<BreakdownModalProps> = ({ visible, onClose
                                 2. Employer Savings (Accruals)
                             </Typography>
                             <View style={styles.card}>
-                                <Row label="Prima de Servicios (8.33%)" value={data.accruals.prima} />
-                                <Row label="Cesantías (8.33%)" value={data.accruals.cesantias} />
-                                <Row label="Interests on Cesantías (12%)" value={data.accruals.intereses} />
-                                <Row label="Vacations (4.17%)" value={data.accruals.vacations} />
+                                <Row label={`Prima de Servicios (${(BENEFIT_PERCENTAGES.PRIMA * 100).toFixed(2)}%)`} value={data.accruals.prima} />
+                                <Row label={`Cesantías (${(BENEFIT_PERCENTAGES.CESANTIAS * 100).toFixed(2)}%)`} value={data.accruals.cesantias} />
+                                <Row label={`Interests on Cesantías (${(BENEFIT_PERCENTAGES.INTERESES_CESANTIAS * 100).toFixed(0)}%)`} value={data.accruals.intereses} />
+                                <Row label={`Vacations (${(BENEFIT_PERCENTAGES.VACATIONS * 100).toFixed(2)}%)`} value={data.accruals.vacations} />
                                 <View style={styles.divider} />
                                 <Row label="Total Accruals" value={data.accruals.totalAccruals} isTotal />
                             </View>
@@ -135,15 +138,18 @@ export const BreakdownModal: React.FC<BreakdownModalProps> = ({ visible, onClose
                                 3. Monthly Social Security (PILA)
                             </Typography>
                             <View style={styles.card}>
-                                <Row label="Health (12.5% total)" value={data.pila.health} />
-                                <Row label="Pension (16% total)" value={data.pila.pension} />
-                                <Row label="Caja de Compensación (4%)" value={data.pila.caja} />
-                                <Row label="ARL (Risk I - 0.522%)" value={data.pila.arl} />
+                                <Row label="Health (Employer + Worker)" value={data.pila.health} />
+                                <Row label="Pension (Employer + Worker)" value={data.pila.pension} />
+                                <Row label="Caja de Compensación (Employer)" value={data.pila.caja} />
+                                <Row label="ARL (Employer)" value={data.pila.arl} />
                                 <View style={styles.divider} />
-                                <Row label="Total PILA Payment" value={data.pila.total} isTotal />
+                                <Row label="Total PILA Payment" value={data.pila.total} isSub />
+                                <Row label="Recovered from Worker" value={-data.pila.workerPortion} isSub />
+                                <View style={[styles.divider, { height: 2, backgroundColor: COLORS.primary }]} />
+                                <Row label="Net Employer Cost" value={data.pila.employerPortion} isTotal />
                             </View>
                             <Typography variant="caption" color={COLORS.textSecondary} style={{ marginTop: SPACING.xs }}>
-                                Note: Worker's portion (8%) is deducted from salary
+                                Note: You pay the total to the bank, but recover the worker's portion from their salary.
                             </Typography>
                         </View>
 

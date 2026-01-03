@@ -117,10 +117,6 @@ export const calculateDetailedMonthTotals = (selectedDays: SelectedDays, setting
         }
         totalHours += hours;
 
-        // Worker PILA contribution (8% of base salary only, not transport)
-        const workerContribution = calculateWorkerPilaContribution(baseSalaryForDay);
-        totalWorkerPilaDeduction += workerContribution.total;
-
         // Accruals
         const accrualResult = calculateAccruals(
             payResult.baseRate,
@@ -135,7 +131,10 @@ export const calculateDetailedMonthTotals = (selectedDays: SelectedDays, setting
         totalAccruals += accrualResult.totalAccruals;
     });
 
-    const pilaResult = calculatePila(dayCount, settings.includeHealth);
+    const pilaResult = calculatePila(dayCount, settings.includeHealth, settings.minimumSalary);
+
+    // Worker PILA is taken from the discrete weeks/IBC calculation
+    totalWorkerPilaDeduction = pilaResult.workerPortion;
     const netPay = totalGrossPay - totalWorkerPilaDeduction;
 
     return {

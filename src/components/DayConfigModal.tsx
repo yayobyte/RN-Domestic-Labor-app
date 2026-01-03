@@ -4,6 +4,8 @@ import { BlurView } from 'expo-blur';
 import { Typography } from '../ui/Typography';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../theme/theme';
 import { Ionicons } from '@expo/vector-icons';
+import { NIGHT_SURCHARGE_PERCENTAGE } from '../business/constants';
+import { MAX_HOURS_PER_DAY, MIN_HOURS_PER_DAY, DEFAULT_HOURS_PER_DAY } from '../business/validation';
 
 interface DayConfigModalProps {
     visible: boolean;
@@ -22,7 +24,7 @@ export const DayConfigModal: React.FC<DayConfigModalProps> = ({
     onDelete,
     onClose,
 }) => {
-    const [hours, setHours] = useState(8);
+    const [hours, setHours] = useState(DEFAULT_HOURS_PER_DAY);
     const [isNight, setIsNight] = useState(false);
 
     useEffect(() => {
@@ -30,13 +32,13 @@ export const DayConfigModal: React.FC<DayConfigModalProps> = ({
             setHours(initialData.hours);
             setIsNight(initialData.isNight);
         } else {
-            setHours(8); // Default
+            setHours(DEFAULT_HOURS_PER_DAY);
             setIsNight(false);
         }
     }, [initialData, visible]);
 
-    const handleIncrement = () => setHours(h => Math.min(24, h + 1));
-    const handleDecrement = () => setHours(h => Math.max(1, h - 1));
+    const handleIncrement = () => setHours(h => Math.min(MAX_HOURS_PER_DAY, h + 1));
+    const handleDecrement = () => setHours(h => Math.max(MIN_HOURS_PER_DAY, h - 1));
 
     if (!date) return null;
 
@@ -81,7 +83,7 @@ export const DayConfigModal: React.FC<DayConfigModalProps> = ({
                         <View style={styles.row}>
                             <View>
                                 <Typography variant="body" weight="medium">Night Shift</Typography>
-                                <Typography variant="caption" color={COLORS.textSecondary}>Add 35% surcharge</Typography>
+                                <Typography variant="caption" color={COLORS.textSecondary}>Add {(NIGHT_SURCHARGE_PERCENTAGE * 100).toFixed(0)}% surcharge</Typography>
                             </View>
                             <Switch
                                 trackColor={{ false: COLORS.border, true: COLORS.base }}

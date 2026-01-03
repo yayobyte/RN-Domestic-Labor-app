@@ -7,13 +7,13 @@ import { Card } from '../ui/Card';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../theme/theme';
 import { useSettings } from '../context/SettingsContext';
 import { Ionicons } from '@expo/vector-icons';
+import { SMMLV_2026 } from '../business/constants';
+import { isValidSalary, clampHours } from '../business/validation';
 
 interface SettingsScreenProps {
     visible: boolean;
     onClose: () => void;
 }
-
-const LEGAL_MINIMUM = 1750905;
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ visible, onClose }) => {
     const { settings, updateSettings, resetToDefaults } = useSettings();
@@ -31,8 +31,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ visible, onClose
     }, [visible, settings]);
 
     const handleSave = async () => {
-        const salaryNum = parseInt(minimumSalary) || LEGAL_MINIMUM;
-        const hoursNum = Math.min(24, Math.max(1, parseInt(defaultHours) || 8));
+        const salaryNum = parseInt(minimumSalary) || SMMLV_2026;
+        const hoursNum = clampHours(parseInt(defaultHours));
 
         await updateSettings({
             includeHealth,
@@ -62,7 +62,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ visible, onClose
     };
 
     const salaryNum = parseInt(minimumSalary) || 0;
-    const showSalaryWarning = salaryNum > 0 && salaryNum < LEGAL_MINIMUM;
+    const showSalaryWarning = salaryNum > 0 && !isValidSalary(salaryNum);
 
     return (
         <Modal
@@ -132,12 +132,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ visible, onClose
                                         <View style={styles.warningBox}>
                                             <Ionicons name="warning" size={16} color={COLORS.error} />
                                             <Typography variant="caption" color={COLORS.error} style={{ marginLeft: SPACING.xs, flex: 1 }}>
-                                                Below legal minimum (${LEGAL_MINIMUM.toLocaleString('es-CO')})
+                                                Below legal minimum (${SMMLV_2026.toLocaleString('es-CO')})
                                             </Typography>
                                         </View>
                                     ) : (
                                         <Typography variant="caption" color={COLORS.textSecondary} style={{ marginTop: SPACING.s }}>
-                                            Legal minimum for 2026: ${LEGAL_MINIMUM.toLocaleString('es-CO')}
+                                            Legal minimum for 2026: ${SMMLV_2026.toLocaleString('es-CO')}
                                         </Typography>
                                     )}
                                 </Card>

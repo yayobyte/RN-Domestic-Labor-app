@@ -19,6 +19,9 @@ export const BENEFIT_PERCENTAGES = {
     INTERESES_CESANTIAS: 0.12, // 12% of accumulated Cesantías (yearly)
     VACATIONS: 0.0417, // 4.17%
     PENSION_EMPLOYER: 0.12, // 12%
+    PENSION_WORKER: 0.04, // 4%
+    HEALTH_EMPLOYER: 0.085, // 8.5%
+    HEALTH_WORKER: 0.04, // 4%
     CAJA_EMPLOYER: 0.04, // 4%
     ARL_LEVEL_1_PERCENTAGE: 0.00522, // 0.522% of SMMLV
 };

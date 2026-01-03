@@ -33,7 +33,7 @@ export const CalculatorScreen = () => {
             baseSalary: 0, transport: 0, surcharge: 0, effectiveHourlyRate: 0, daysWorked: 0
         },
         accruals: { prima: 0, cesantias: 0, intereses: 0, vacations: 0, totalAccruals: 0 },
-        pila: { weeks: 0, totalIBC: 0, pension: 0, caja: 0, arl: 0, health: 0, total: 0 },
+        pila: { weeks: 0, totalIBC: 0, pension: 0, caja: 0, arl: 0, health: 0, employerPortion: 0, workerPortion: 0, total: 0 },
     });
 
     useEffect(() => {
