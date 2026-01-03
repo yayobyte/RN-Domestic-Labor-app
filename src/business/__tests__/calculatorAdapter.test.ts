@@ -37,6 +37,18 @@ describe('Calculator Adapter Logic', () => {
         expect(results.pay.surcharge).toBeGreaterThan(0);
     });
 
+    it('should never return a negative net pay (safety floor)', () => {
+        // 1 hour for 1 day is very low pay, but 1 week PILA is high
+        const selectedDays: SelectedDays = {
+            '2026-01-01': { hours: 1, isNight: false },
+        };
+        const settings = { ...mockSettings, includeHealth: true };
+        const results = calculateDetailedMonthTotals(selectedDays, settings);
+
+        expect(results.pay.netPay).toBe(0);
+        expect(results.pay.grossPay).toBeLessThan(results.pila.workerPortion);
+    });
+
     it('should correctly handle custom minimum salary from settings', () => {
         const customSMMLV = 2000000;
         const settings = { ...mockSettings, minimumSalary: customSMMLV };

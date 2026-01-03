@@ -11,6 +11,7 @@ interface SummaryCardProps {
     accruals: number;
     pila: number;
     onPress: () => void;
+    isWarning?: boolean;
 }
 
 const formatCurrency = (value: number) => {
@@ -27,12 +28,13 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
     accruals,
     pila,
     onPress,
+    isWarning,
 }) => {
     return (
         <TouchableOpacity style={styles.container} activeOpacity={0.9} onPress={onPress}>
             {/* Main Pay Card - Highlighted */}
             <LinearGradient
-                colors={[COLORS.gradientStart, COLORS.gradientEnd]}
+                colors={isWarning ? [COLORS.error, '#ff6b6b'] : [COLORS.gradientStart, COLORS.gradientEnd]}
                 start={[0, 0]}
                 end={[1, 1]}
                 style={styles.mainCard}
@@ -41,15 +43,25 @@ export const SummaryCard: React.FC<SummaryCardProps> = ({
                     <Typography variant="label" color="rgba(255,255,255,0.8)">
                         NET PAY TO WORKER (TODAY)
                     </Typography>
-                    <Ionicons name="information-circle-outline" size={20} color="rgba(255,255,255,0.6)" />
+                    <Ionicons name={isWarning ? "warning-outline" : "information-circle-outline"} size={20} color="rgba(255,255,255,0.6)" />
                 </View>
 
                 <Typography variant="h1" weight="bold" color="#FFF">
                     {formatCurrency(directPay)}
                 </Typography>
-                <Typography variant="caption" color="rgba(255,255,255,0.8)">
-                    After PILA deductions
-                </Typography>
+
+                {isWarning ? (
+                    <View style={styles.warningRow}>
+                        <Ionicons name="alert-circle" size={14} color="#FFF" style={{ marginRight: 4 }} />
+                        <Typography variant="caption" weight="bold" color="#FFF">
+                            Hours too low to cover PILA (Net pay set to 0)
+                        </Typography>
+                    </View>
+                ) : (
+                    <Typography variant="caption" color="rgba(255,255,255,0.8)">
+                        After PILA deductions
+                    </Typography>
+                )}
             </LinearGradient>
 
             <View style={styles.row}>
@@ -120,5 +132,10 @@ const styles = StyleSheet.create({
     },
     hintContainer: {
         alignItems: 'center',
+    },
+    warningRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 2,
     }
 });

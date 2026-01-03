@@ -64,7 +64,7 @@ export const calculateDetailedMonthTotals = (selectedDays: SelectedDays, setting
 
     // Worker PILA is taken from the discrete weeks/IBC calculation
     totalWorkerPilaDeduction = pilaResult.workerPortion;
-    const netPay = totalGrossPay - totalWorkerPilaDeduction;
+    const netPay = Math.max(0, totalGrossPay - totalWorkerPilaDeduction);
 
     return {
         pay: {

@@ -103,6 +103,7 @@ export const CalculatorScreen = () => {
                     accruals={results.accruals.totalAccruals}
                     pila={results.pila.total}
                     onPress={() => setIsBreakdownVisible(true)}
+                    isWarning={results.pay.grossPay > 0 && results.pay.netPay === 0}
                 />
 
                 <WorkCalendar
