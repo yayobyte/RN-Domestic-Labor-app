@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { SummaryCard } from '../components/SummaryCard';
 import { BreakdownModal } from '../components/BreakdownModal';
@@ -16,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 export const CalculatorScreen = () => {
     const { settings } = useSettings();
+    const insets = useSafeAreaInsets();
 
     // State
     const [selectedDays, setSelectedDays] = useState<SelectedDays>({});
@@ -80,10 +81,16 @@ export const CalculatorScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
-            <StatusBar style="dark" />
+        <SafeAreaView style={styles.safeArea} edges={['top', 'bottom', 'left', 'right']}>
+            <StatusBar style="dark" translucent={true} />
 
-            <ScrollView contentContainerStyle={styles.scrollContent}>
+            <ScrollView
+                contentContainerStyle={[
+                    styles.scrollContent,
+                    { paddingBottom: SPACING.xl }
+                ]}
+                showsVerticalScrollIndicator={false}
+            >
                 <View style={styles.header}>
                     <View>
                         <Typography variant="h1" weight="bold" color={COLORS.primary}>
@@ -153,7 +160,6 @@ const styles = StyleSheet.create({
     },
     scrollContent: {
         padding: SPACING.l,
-        paddingBottom: SPACING.xxl,
     },
     header: {
         flexDirection: 'row',

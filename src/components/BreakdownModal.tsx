@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Modal, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Typography } from '../ui/Typography';
 import { COLORS, SPACING, RADIUS, SHADOWS } from '../theme/theme';
 import { BlurView } from 'expo-blur';
@@ -68,6 +69,7 @@ const Row = ({ label, value, isTotal = false, isSub = false }: { label: string; 
 );
 
 export const BreakdownModal: React.FC<BreakdownModalProps> = ({ visible, onClose, data }) => {
+    const insets = useSafeAreaInsets();
     if (!data.pay || !data.accruals || !data.pila) return null;
 
     return (
@@ -80,12 +82,12 @@ export const BreakdownModal: React.FC<BreakdownModalProps> = ({ visible, onClose
             <View style={styles.centeredView}>
                 {/* Backdrop with Blur on iOS, dim on Android */}
                 {Platform.OS === 'ios' ? (
-                    <BlurView intensity={20} style={StyleSheet.absoluteFill} tint="dark" />
+                    <BlurView intensity={20} style={styles.absoluteFill} tint="dark" />
                 ) : (
-                    <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.5)' }]} />
+                    <View style={[styles.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.5)' }]} />
                 )}
 
-                <View style={styles.modalView}>
+                <View style={[styles.modalView, { paddingBottom: insets.bottom }]}>
                     <View style={styles.header}>
                         <Typography variant="h3" weight="bold" color={COLORS.primary}>
                             Detailed Breakdown
@@ -162,6 +164,9 @@ export const BreakdownModal: React.FC<BreakdownModalProps> = ({ visible, onClose
 };
 
 const styles = StyleSheet.create({
+    absoluteFill: {
+        ...StyleSheet.absoluteFillObject,
+    },
     centeredView: {
         flex: 1,
         justifyContent: 'flex-end',

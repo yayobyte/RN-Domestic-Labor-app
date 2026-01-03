@@ -22,7 +22,13 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
+      "statusBar": {
+        "backgroundColor": "transparent",
+        "translucent": true
+      },
+      "navigationBar": {
+        "backgroundColor": "transparent"
+      },
       "package": "com.domesticlaborcalculator.app"
     },
     "web": {

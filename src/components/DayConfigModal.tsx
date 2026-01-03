@@ -54,7 +54,11 @@ export const DayConfigModal: React.FC<DayConfigModalProps> = ({
             onRequestClose={onClose}
         >
             <View style={styles.centeredView}>
-                <BlurView intensity={20} style={StyleSheet.absoluteFill} tint="dark" />
+                {Platform.OS === 'ios' ? (
+                    <BlurView intensity={20} style={styles.absoluteFill} tint="dark" />
+                ) : (
+                    <View style={[styles.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.7)' }]} />
+                )}
 
                 <View style={styles.modalView}>
                     <View style={styles.header}>
@@ -144,6 +148,9 @@ export const DayConfigModal: React.FC<DayConfigModalProps> = ({
 };
 
 const styles = StyleSheet.create({
+    absoluteFill: {
+        ...StyleSheet.absoluteFillObject,
+    },
     centeredView: {
         flex: 1,
         justifyContent: 'center',

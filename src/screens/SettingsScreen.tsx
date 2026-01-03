@@ -9,6 +9,7 @@ import { useSettings } from '../context/SettingsContext';
 import { Ionicons } from '@expo/vector-icons';
 import { SMMLV_2026 } from '../business/constants';
 import { isValidSalary, clampHours } from '../business/validation';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface SettingsScreenProps {
     visible: boolean;
@@ -17,6 +18,7 @@ interface SettingsScreenProps {
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ visible, onClose }) => {
     const { settings, updateSettings, resetToDefaults } = useSettings();
+    const insets = useSafeAreaInsets();
 
     const [includeHealth, setIncludeHealth] = useState(settings.includeHealth);
     const [minimumSalary, setMinimumSalary] = useState(settings.minimumSalary.toString());
@@ -73,16 +75,16 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ visible, onClose
         >
             <View style={styles.centeredView}>
                 {Platform.OS === 'ios' ? (
-                    <BlurView intensity={20} style={StyleSheet.absoluteFill} tint="dark" />
+                    <BlurView intensity={20} style={styles.absoluteFill} tint="dark" />
                 ) : (
-                    <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.5)' }]} />
+                    <View style={[styles.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.5)' }]} />
                 )}
 
                 <KeyboardAvoidingView
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                     style={styles.keyboardView}
                 >
-                    <View style={styles.modalView}>
+                    <View style={[styles.modalView, { paddingBottom: Math.max(insets.bottom, SPACING.m) }]}>
                         <View style={styles.header}>
                             <Typography variant="h3" weight="bold" color={COLORS.primary}>
                                 Settings
@@ -191,6 +193,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ visible, onClose
 };
 
 const styles = StyleSheet.create({
+    absoluteFill: {
+        ...StyleSheet.absoluteFillObject,
+    },
     centeredView: {
         flex: 1,
         justifyContent: 'flex-end',
