@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "domestic-labor-calculator",
-    "slug": "domestic-labor-calculator",
+    "name": "Labor Calculator",
+    "slug": "labor-calculator",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.domesticlaborcalculator.app"
+      "bundleIdentifier": "com.yayobyte.laborcalculator"
     },
     "android": {
       "adaptiveIcon": {
@@ -29,7 +29,7 @@
       "navigationBar": {
         "backgroundColor": "transparent"
       },
-      "package": "com.domesticlaborcalculator.app"
+      "package": "com.yayobyte.laborcalculator"
     },
     "web": {
       "favicon": "./assets/favicon.png"

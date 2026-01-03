@@ -94,10 +94,10 @@ export const CalculatorScreen = () => {
                 <View style={styles.header}>
                     <View>
                         <Typography variant="h1" weight="bold" color={COLORS.primary}>
-                            Domestic Labor
+                            Labor Calculator
                         </Typography>
                         <Typography variant="body" color={COLORS.textSecondary}>
-                            Colombia 2026 Calculator
+                            Colombia 2026
                         </Typography>
                     </View>
                     <TouchableOpacity onPress={() => setIsSettingsVisible(true)} style={styles.settingsButton}>
